@@ -1,50 +1,85 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { axios } from "../axios";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
 
 export default function Invoices() {
+  const [invoices, setInvoices] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    document.title = "Invoice List";
+    axios
+      .get("/invoices")
+      .then((response) => {
+        setInvoices(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(true);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <Card>
       <Card.Body>
-        <Card.Title className="d-inline-block mr-4 display-4">
+        <Card.Title className="d-inline-block mr-4 mb-4 display-4">
           Invoice List
         </Card.Title>
         <Button variant="outline-dark" className="align-text-bottom">
           Create
         </Button>
 
-        <Table striped hover className="mt-4">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Customer Name</th>
-              <th>Discount</th>
-              <th>Total</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="align-middle">1</td>
-              <td className="align-middle">Mark Otto</td>
-              <td className="align-middle">5%</td>
-              <td className="align-middle">$125.75</td>
-              <td>
-                <Button variant="outline-dark">Edit</Button>
-              </td>
-            </tr>
-            <tr>
-              <td className="align-middle">2</td>
-              <td className="align-middle">Jacob Thornton</td>
-              <td className="align-middle">10%</td>
-              <td className="align-middle">$420.69</td>
-              <td>
-                <Button variant="outline-dark">Edit</Button>
-              </td>
-            </tr>
-          </tbody>
-        </Table>
+        {loading && (
+          <div className="d-flex justify-content-center mb-4">
+            <Spinner animation="border" role="status">
+              <span className="sr-only">Loading...</span>
+            </Spinner>
+          </div>
+        )}
+
+        {!loading && error && (
+          <Alert variant="danger">
+            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+            <p>
+              Change this and that and try again. Duis mollis, est non commodo
+              luctus, nisi erat porttitor ligula, eget lacinia odio sem nec
+              elit. Cras mattis consectetur purus sit amet fermentum.
+            </p>
+          </Alert>
+        )}
+
+        {!loading && !error && (
+          <Table striped hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer Name</th>
+                <th>Discount</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {invoices.map((invoice) => (
+                <tr key={invoice.id}>
+                  <td className="align-middle">{invoice.id}</td>
+                  <td className="align-middle">{invoice.customerName}</td>
+                  <td className="align-middle">{invoice.discount}%</td>
+                  <td className="align-middle">${invoice.totalPrice}</td>
+                  <td>
+                    <Button variant="outline-dark">Edit</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Card.Body>
     </Card>
   );
