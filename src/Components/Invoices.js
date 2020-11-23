@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { axios } from "../axios";
+import getInvoices from "../api/getInvoices";
+
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
@@ -13,10 +14,9 @@ export default function Invoices() {
 
   useEffect(() => {
     document.title = "Invoice List";
-    axios
-      .get("/invoices")
-      .then((response) => {
-        setInvoices(response.data);
+    getInvoices()
+      .then((res) => {
+        setInvoices(res.data);
         setLoading(false);
       })
       .catch((error) => {
