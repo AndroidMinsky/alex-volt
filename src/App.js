@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Header from "./Components/Header";
 import Invoices from "./Components/Invoices";
-import Products from "./Components/Products";
+import Products from "./features/products/Products";
 import Customers from "./Components/Customers";
 import Container from "react-bootstrap/Container";
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import getInvoices from "../api/getInvoices";
 
+import Spinner from "./Spinner";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 
 export default function Invoices() {
@@ -35,13 +35,7 @@ export default function Invoices() {
           Create
         </Button>
 
-        {loading && (
-          <div className="d-flex justify-content-center mb-4">
-            <Spinner animation="border" role="status">
-              <span className="sr-only">Loading...</span>
-            </Spinner>
-          </div>
-        )}
+        {loading && <Spinner />}
 
         {!loading && error && (
           <Alert variant="danger">
