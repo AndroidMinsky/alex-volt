@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 
 import Header from "./Components/Header";
 import Invoices from "./Components/Invoices";
@@ -8,23 +9,25 @@ import Container from "react-bootstrap/Container";
 
 function App() {
   return (
-    <Router>
-      <Container>
-        <Header />
+    <HelmetProvider>
+      <Router>
+        <Container>
+          <Header />
 
-        <Switch>
-          <Route path="/products">
-            <Products />
-          </Route>
-          <Route path="/customers">
-            <Customers />
-          </Route>
-          <Route path="/">
-            <Invoices />
-          </Route>
-        </Switch>
-      </Container>
-    </Router>
+          <Switch>
+            <Route path="/products">
+              <Products />
+            </Route>
+            <Route path="/customers">
+              <Customers />
+            </Route>
+            <Route path="/">
+              <Invoices />
+            </Route>
+          </Switch>
+        </Container>
+      </Router>
+    </HelmetProvider>
   );
 }
 

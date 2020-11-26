@@ -5,7 +5,6 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async () => {
     const res = await getProducts();
-    console.log(res.data);
     return res.data;
   }
 );
@@ -20,15 +19,14 @@ export const productsSlice = createSlice({
   reducers: {},
   extraReducers: {
     [fetchProducts.fulfilled]: (state, action) => {
-      state.products.push(action.payload);
-      console.log(action.payload);
+      state.products = action.payload;
       state.loading = false;
     },
     [fetchProducts.rejected]: (state, action) => {
       state.error = action.error;
       state.loading = false;
     },
-    [fetchProducts.pending]: (state, action) => {
+    [fetchProducts.pending]: (state) => {
       state.loading = true;
     },
   },
