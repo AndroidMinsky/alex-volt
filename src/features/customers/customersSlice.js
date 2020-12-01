@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import getCustomers from "../../api/getCustomers";
+import { getCustomers, putCustomer } from "../../api/customers";
 
-export const selectCustomerById = createSelector(
-  (state) => state.customers.customers,
-  (_, props) => props.id,
-  (customers, id) => customers.find((customer) => customer.id === id)
-);
+const initialState = {
+  customers: [],
+  loading: false,
+  error: false,
+};
 
 export const fetchCustomers = createAsyncThunk(
   "customers/fetchCustomers",
@@ -16,13 +16,18 @@ export const fetchCustomers = createAsyncThunk(
   }
 );
 
+export const updateCustomer = createAsyncThunk(
+  "customers/updateCustomer",
+  async (data) => {
+    const { id, newData } = data;
+    const res = await putCustomer(id, newData);
+    return res.data;
+  }
+);
+
 export const customersSlice = createSlice({
   name: "customers",
-  initialState: {
-    customers: [],
-    loading: false,
-    error: false,
-  },
+  initialState,
   reducers: {},
   extraReducers: {
     [fetchCustomers.fulfilled]: (state, action) => {
@@ -36,9 +41,24 @@ export const customersSlice = createSlice({
     [fetchCustomers.pending]: (state) => {
       state.loading = true;
     },
+    [updateCustomer.fulfilled]: (state, { payload }) => {
+      let newData = state.customers.find(
+        (customer) => customer.id === payload.id
+      );
+
+      if (newData) {
+        newData = payload;
+      }
+    },
   },
 });
 
+export default customersSlice.reducer;
+
 export const selectCustomers = (state) => state.customers;
 
-export default customersSlice.reducer;
+export const selectCustomerById = createSelector(
+  (state) => state.customers.customers,
+  (_, props) => props.id,
+  (customers, id) => customers.find((customer) => customer.id === id)
+);

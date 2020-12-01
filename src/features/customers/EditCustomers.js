@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
-import { selectCustomerById } from "./customersSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectCustomerById, updateCustomer } from "./customersSlice";
 
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -9,9 +9,11 @@ import Button from "react-bootstrap/Button";
 
 export default function EditCustomers(props) {
   const { register, handleSubmit } = useForm();
+  const dispatch = useDispatch();
   const customer = useSelector((state) => selectCustomerById(state, props));
 
   const onSubmit = (data) => {
+    dispatch(updateCustomer({ id: props.id, newData: data }));
     props.handleClose();
   };
 
