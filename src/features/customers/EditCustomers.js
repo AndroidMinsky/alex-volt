@@ -1,30 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { selectCustomers } from "./customersSlice";
-import { customerSelector } from "./customerSelector";
+import { selectCustomerById } from "./customersSlice";
 
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
 export default function EditCustomers(props) {
-  const { customers } = useSelector(selectCustomers);
-  const [customer, setCustomer] = useState("");
   const { register, handleSubmit } = useForm();
-
-  useEffect(() => {
-    setCustomer(customerSelector(customers, props));
-  }, [props]);
+  const customer = useSelector((state) => selectCustomerById(state, props));
 
   const onSubmit = (data) => {
-    console.log(data, props.id);
     props.handleClose();
   };
 
   return (
     <>
-      {customer && customer.id === props.id && (
+      {customer && (
         <Modal show={props.show} onHide={props.handleClose}>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Modal.Header closeButton>
@@ -60,10 +53,10 @@ export default function EditCustomers(props) {
               </Form.Group>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={props.handleClose}>
+              <Button variant="dark" onClick={props.handleClose}>
                 Close
               </Button>
-              <Button variant="primary" type="submit">
+              <Button variant="success" type="submit">
                 Save Changes
               </Button>
             </Modal.Footer>

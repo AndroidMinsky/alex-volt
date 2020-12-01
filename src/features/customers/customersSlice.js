@@ -1,5 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
 import getCustomers from "../../api/getCustomers";
+
+export const selectCustomerById = createSelector(
+  (state) => state.customers.customers,
+  (_, props) => props.id,
+  (customers, id) => customers.find((customer) => customer.id === id)
+);
 
 export const fetchCustomers = createAsyncThunk(
   "customers/fetchCustomers",
