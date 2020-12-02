@@ -42,13 +42,10 @@ export const customersSlice = createSlice({
       state.loading = true;
     },
     [updateCustomer.fulfilled]: (state, { payload }) => {
-      let newData = state.customers.find(
+      const index = state.customers.findIndex(
         (customer) => customer.id === payload.id
       );
-
-      if (newData) {
-        newData = payload;
-      }
+      state.customers[index] = payload;
     },
   },
 });
