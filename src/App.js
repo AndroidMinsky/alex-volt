@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
 import Header from "./Components/Header";
-import Invoices from "./Components/Invoices";
+import Invoices from "./features/invoices/Invoices";
 import Products from "./features/products/Products";
-import Customers from "./Components/Customers";
+import Customers from "./features/customers/Customers";
 import Container from "react-bootstrap/Container";
 
 function App() {
