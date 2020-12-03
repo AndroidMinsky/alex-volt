@@ -5,12 +5,17 @@ import { Helmet } from "react-helmet-async";
 
 import Spinner from "../../Components/Spinner";
 import EditCustomers from "./EditCustomers";
+import CreateCustomers from "./CreateCustomers";
+import DeleteCustomer from "./DeleteCustomers";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import { RiEdit2Line, RiDeleteBin2Line } from "react-icons/ri";
 
 export default function Customers() {
-  const [show, setShow] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState("");
   const { customers, loading, error } = useSelector(selectCustomers);
   const dispatch = useDispatch();
@@ -19,10 +24,19 @@ export default function Customers() {
     dispatch(fetchCustomers());
   }, [dispatch]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = (id) => {
+  const handleCloseEditModal = () => setShowEditModal(false);
+  const handleShowEditModal = (id) => {
     setId(id);
-    setShow(true);
+    setShowEditModal(true);
+  };
+
+  const handleCloseCreateModal = () => setShowCreateModal(false);
+  const handleShowCreateModal = () => setShowCreateModal(true);
+
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleShowDeleteModal = (id) => {
+    setId(id);
+    setShowDeleteModal(true);
   };
 
   return (
@@ -35,7 +49,11 @@ export default function Customers() {
           <Card.Title className="d-inline-block mr-4 display-4">
             Customer List
           </Card.Title>
-          <Button variant="outline-dark" className="align-text-bottom">
+          <Button
+            variant="outline-dark"
+            className="align-text-bottom"
+            onClick={() => handleShowCreateModal()}
+          >
             Create
           </Button>
 
@@ -53,19 +71,26 @@ export default function Customers() {
                 </tr>
               </thead>
               <tbody>
-                {customers.map((customer) => (
+                {customers.map((customer, index) => (
                   <tr key={customer.id}>
-                    <td className="align-middle">{customer.id}</td>
+                    <td className="align-middle">{index + 1}</td>
                     <td className="align-middle">{customer.name}</td>
                     <td className="align-middle">{customer.address}</td>
                     <td className="align-middle">{customer.phone}</td>
                     <td>
-                      <Button
-                        variant="outline-dark"
-                        onClick={() => handleShow(customer.id)}
+                      <RiEdit2Line
+                        size="1.5em"
+                        style={{ cursor: "pointer" }}
+                        className="mr-3"
+                        onClick={() => handleShowEditModal(customer.id)}
                       >
                         Edit
-                      </Button>
+                      </RiEdit2Line>
+                      <RiDeleteBin2Line
+                        size="1.5em"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleShowDeleteModal(customer.id)}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -74,7 +99,20 @@ export default function Customers() {
           )}
         </Card.Body>
       </Card>
-      <EditCustomers show={show} handleClose={handleClose} id={id} />
+      <EditCustomers
+        show={showEditModal}
+        handleClose={handleCloseEditModal}
+        id={id}
+      />
+      <CreateCustomers
+        show={showCreateModal}
+        handleClose={handleCloseCreateModal}
+      />
+      <DeleteCustomer
+        show={showDeleteModal}
+        handleClose={handleCloseDeleteModal}
+        id={id}
+      />
     </>
   );
 }

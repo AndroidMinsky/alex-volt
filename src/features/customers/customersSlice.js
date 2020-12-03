@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import { getCustomers, putCustomer } from "../../api/customers";
+import {
+  getCustomers,
+  postCustomer,
+  putCustomer,
+  deleteCustomer,
+} from "../../api/customers";
 
 const initialState = {
   customers: [],
@@ -16,12 +21,28 @@ export const fetchCustomers = createAsyncThunk(
   }
 );
 
+export const createCustomer = createAsyncThunk(
+  "customers/createCustomer",
+  async (data) => {
+    const res = await postCustomer(data);
+    return res.data;
+  }
+);
+
 export const updateCustomer = createAsyncThunk(
   "customers/updateCustomer",
   async (data) => {
     const { id, newData } = data;
     const res = await putCustomer(id, newData);
     return res.data;
+  }
+);
+
+export const removeCustomer = createAsyncThunk(
+  "customers/removeCustomer",
+  async (id) => {
+    await deleteCustomer(id);
+    return id;
   }
 );
 
@@ -41,11 +62,20 @@ export const customersSlice = createSlice({
     [fetchCustomers.pending]: (state) => {
       state.loading = true;
     },
+    [createCustomer.fulfilled]: (state, action) => {
+      state.customers.push(action.payload);
+    },
     [updateCustomer.fulfilled]: (state, { payload }) => {
       const index = state.customers.findIndex(
         (customer) => customer.id === payload.id
       );
       state.customers[index] = payload;
+    },
+    [removeCustomer.fulfilled]: (state, action) => {
+      const index = state.customers.findIndex(
+        (customer) => customer.id === action.payload
+      );
+      state.customers.splice(index, 1);
     },
   },
 });
