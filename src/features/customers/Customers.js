@@ -52,7 +52,7 @@ export default function Customers() {
           <Button
             variant="outline-dark"
             className="align-text-bottom"
-            onClick={() => handleShowCreateModal()}
+            onClick={handleShowCreateModal}
           >
             Create
           </Button>
