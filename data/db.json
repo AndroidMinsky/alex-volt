@@ -5,54 +5,54 @@
       "customerName": "Kaia Brooks",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99
+          "price": 19.99,
+          "quantity": 1
         },
         {
-          "id": 2,
-          "name": "Phone Holder",
-          "price": 249.75
+          "name": "Egg Timer",
+          "price": 249.75,
+          "quantity": 1
         }
       ],
       "discount": 10,
-      "totalPrice": 420.69
+      "totalPrice": 242.76
     },
     {
       "id": 2,
       "customerName": "Kendall Kirkpatrick",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99
+          "price": 19.99,
+          "quantity": 1
         },
         {
-          "id": 2,
-          "name": "Phone Holder",
-          "price": 249.75
+          "name": "Egg Timer",
+          "price": 249.75,
+          "quantity": 1
         }
       ],
       "discount": 5,
-      "totalPrice": 99.75
+      "totalPrice": 256.25
     },
     {
       "id": 3,
       "customerName": "Alysha Markham",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99
+          "price": 19.99,
+          "quantity": 1
         },
         {
-          "id": 2,
-          "name": "Phone Holder",
-          "price": 249.75
+          "name": "Egg Timer",
+          "price": 249.75,
+          "quantity": 1
         }
       ],
       "discount": 7.5,
-      "totalPrice": 75.49
+      "totalPrice": 249.50
     }
   ],
   "customers": [
@@ -89,7 +89,7 @@
     },
     {
       "id": 3,
-      "name": "Phone Holder",
+      "name": "Egg Timer",
       "price": 249.75
     }
   ]

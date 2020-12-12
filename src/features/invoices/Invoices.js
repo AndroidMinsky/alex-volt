@@ -2,12 +2,14 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchInvoices, selectInvoices } from "./invoicesSlice";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 import Spinner from "../../Components/Spinner";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Alert from "react-bootstrap/Alert";
+import { RiEdit2Line, RiDeleteBin2Line } from "react-icons/ri";
 
 export default function Invoices() {
   const { invoices, loading, error } = useSelector(selectInvoices);
@@ -63,7 +65,23 @@ export default function Invoices() {
                     <td className="align-middle">{invoice.discount}%</td>
                     <td className="align-middle">${invoice.totalPrice}</td>
                     <td>
-                      <Button variant="outline-dark">Edit</Button>
+                      <Link
+                        style={{ color: "inherit", textDecoration: "inherit" }}
+                        to={{
+                          pathname: `/invoices/${invoice.id}/edit`,
+                        }}
+                      >
+                        <RiEdit2Line
+                          size="1.5em"
+                          style={{ cursor: "pointer" }}
+                          className="mr-3"
+                        />
+                      </Link>
+
+                      <RiDeleteBin2Line
+                        size="1.5em"
+                        style={{ cursor: "pointer" }}
+                      />
                     </td>
                   </tr>
                 ))}
