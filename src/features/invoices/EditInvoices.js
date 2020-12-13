@@ -6,6 +6,7 @@ import { fetchCustomers, selectCustomers } from "../customers/customersSlice";
 import { fetchProducts, selectProducts } from "../products/productsSlice";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { nanoid } from "nanoid";
 
 import Card from "react-bootstrap/Card";
 import Alert from "react-bootstrap/Alert";
@@ -22,30 +23,63 @@ export default function EditInvoices() {
   let { id } = useParams();
   let history = useHistory();
   const dispatch = useDispatch();
+  const { register, handleSubmit } = useForm();
 
   const invoice = useSelector((state) => selectInvoiceById(state, id));
   const { customers } = useSelector(selectCustomers);
   const { products } = useSelector(selectProducts);
 
   const [productsList, setproductsList] = useState(invoice.products);
-  const { register, handleSubmit } = useForm();
+  const [productToAdd, setProductToAdd] = useState(null);
+  const [discount, setDiscount] = useState(invoice.discount);
 
   useEffect(() => {
     dispatch(fetchCustomers());
     dispatch(fetchProducts());
-  }, []);
+  }, [dispatch]);
 
   const handleCancel = () => {
     history.goBack();
   };
 
-  const handleQuantityChange = (e, name) => {
+  const handleQuantityChange = (value, name, index) => {
     const productPrice = products.find((product) => product.name === name)
       .price;
-    const newPrice = productPrice * e;
+    const newPrice = productPrice * value;
+    const newQty = [...productsList];
+    newQty[index] = { ...newQty[index], price: newPrice, quantity: +value };
+    setproductsList(newQty);
   };
 
-  const onSubmit = () => {};
+  const handleTotalPrice = () => {
+    const productsPrice = productsList
+      .map((product) => product.price)
+      .reduce((a, b) => a + b);
+    return (productsPrice - (productsPrice * discount) / 100).toFixed(2);
+  };
+
+  const handleAddProduct = (productName) => {
+    const id = nanoid();
+    if (productName) {
+      const product = products.find((product) => product.name === productName);
+      const productToAdd = (({ name, price }) => ({
+        id: id,
+        name,
+        price,
+        quantity: 1,
+      }))(product);
+      setproductsList([...productsList, productToAdd]);
+    }
+  };
+
+  const handleDeleteProduct = (id) => {
+    const newProductsList = productsList.filter((product) => product.id !== id);
+    setproductsList(newProductsList);
+  };
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
   const error = (
     <Alert variant="danger">
@@ -74,8 +108,9 @@ export default function EditInvoices() {
                     placeholder="Discount"
                     name="discount"
                     type="number"
-                    defaultValue={invoice.discount}
+                    defaultValue={discount}
                     ref={register}
+                    onChange={(e) => setDiscount(e.target.value)}
                   />
                 </Form.Group>
               </Col>
@@ -108,6 +143,7 @@ export default function EditInvoices() {
                       name="product"
                       ref={register}
                       defaultValue="0"
+                      onChange={(e) => setProductToAdd(e.target.value)}
                       custom
                     >
                       <option value="0" disabled>
@@ -123,6 +159,7 @@ export default function EditInvoices() {
                       <Button
                         variant="outline-dark"
                         className="align-text-bottom d-inline-block"
+                        onClick={() => handleAddProduct(productToAdd)}
                       >
                         Add
                       </Button>
@@ -141,10 +178,12 @@ export default function EditInvoices() {
                   </tr>
                 </thead>
                 <tbody>
-                  {invoice.products.map((product) => (
-                    <tr key={product.name}>
+                  {productsList.map((product, index) => (
+                    <tr key={product.id}>
                       <td className="align-middle">{product.name}</td>
-                      <td className="align-middle">${product.price}</td>
+                      <td className="align-middle">
+                        ${product.price.toFixed(2)}
+                      </td>
                       <td className="align-middle">
                         <Col sm={4} className="p-0">
                           <Form.Group className="m-0">
@@ -157,7 +196,8 @@ export default function EditInvoices() {
                               onChange={(e) =>
                                 handleQuantityChange(
                                   e.target.value,
-                                  product.name
+                                  product.name,
+                                  index
                                 )
                               }
                               ref={register}
@@ -169,6 +209,7 @@ export default function EditInvoices() {
                         <RiDeleteBin2Line
                           size="1.5em"
                           style={{ cursor: "pointer" }}
+                          onClick={() => handleDeleteProduct(product.id)}
                         />
                       </td>
                     </tr>
@@ -178,7 +219,7 @@ export default function EditInvoices() {
               <Container className="p-0">
                 <Row>
                   <Col>
-                    <h3 className="display-4">Total: $99.69</h3>
+                    <h3 className="display-4">Total: ${handleTotalPrice()}</h3>
                   </Col>
                   <Col
                     xs
@@ -192,7 +233,9 @@ export default function EditInvoices() {
                     >
                       Cancel
                     </Button>
-                    <Button variant="success">Save</Button>
+                    <Button variant="success" type="submit">
+                      Save
+                    </Button>
                   </Col>
                 </Row>
               </Container>
