@@ -27,13 +27,13 @@
         {
           "id": 1,
           "name": "Phone Holder",
-          "price": 19.99,
+          "price": 39.98,
           "quantity": 2
         },
         {
           "id": 2,
           "name": "Egg Timer",
-          "price": 249.75,
+          "price": 499.5,
           "quantity": 2
         }
       ],
@@ -47,13 +47,13 @@
         {
           "id": 1,
           "name": "Phone Holder",
-          "price": 19.99,
+          "price": 59.97,
           "quantity": 3
         },
         {
           "id": 2,
           "name": "Egg Timer",
-          "price": 249.75,
+          "price": 749.25,
           "quantity": 3
         }
       ],

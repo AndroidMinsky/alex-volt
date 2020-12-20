@@ -125,7 +125,7 @@ export default function EditInvoices() {
               </p>
             </Alert>
           )}
-          {!loading && !error && productsList && invoice && (
+          {!loading && !error && productsList && (
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Col sm={3} className="p-0">
                 <Form.Group>
@@ -142,7 +142,11 @@ export default function EditInvoices() {
               </Col>
 
               <Col sm={6} className="p-0">
-                <CustomersDropdown customer={customer} register={register} />
+                <CustomersDropdown
+                  customer={customer}
+                  setCustomer={setCustomer}
+                  register={register}
+                />
               </Col>
 
               <Col sm={6} className="p-0">

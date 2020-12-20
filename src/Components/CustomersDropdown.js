@@ -6,7 +6,7 @@ import {
   selectCustomers,
 } from "../features/customers/customersSlice";
 
-export default function CustomersDropdown({ customer, register }) {
+export default function CustomersDropdown({ customer, setCustomer, register }) {
   const dispatch = useDispatch();
   const { customers } = useSelector(selectCustomers);
 
@@ -22,11 +22,12 @@ export default function CustomersDropdown({ customer, register }) {
         name="customer"
         ref={register}
         custom
-        defaultValue={customer}
+        value={customer}
+        onChange={(e) => setCustomer(e.target.value)}
       >
-        {customers.map((customer) => (
-          <option key={customer.name} value={customer.name}>
-            {customer.name}
+        {customers.map((cust) => (
+          <option key={cust.name} value={cust.name}>
+            {cust.name}
           </option>
         ))}
       </Form.Control>
