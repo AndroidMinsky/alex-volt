@@ -2,12 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getInvoices } from "../../api/invoices";
 import { createSelector } from "reselect";
 
-const initialState = {
-  invoices: [],
-  loading: false,
-  error: false,
-};
-
 export const fetchInvoices = createAsyncThunk(
   "invoices/fetchInvoices",
   async () => {
@@ -18,7 +12,11 @@ export const fetchInvoices = createAsyncThunk(
 
 export const invoicesSlice = createSlice({
   name: "invoices",
-  initialState,
+  initialState: {
+    invoices: [],
+    loading: false,
+    error: false,
+  },
   reducers: {},
   extraReducers: {
     [fetchInvoices.fulfilled]: (state, action) => {
