@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { fetchProducts } from "../features/products/productsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchProducts,
+  selectProducts,
+} from "../features/products/productsSlice";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 
-export default function ProductsDropdown({ products, addProduct }) {
+export default function ProductsDropdown({ addProduct }) {
   const dispatch = useDispatch();
-
+  const { products } = useSelector(selectProducts);
   const [productToAdd, setProductToAdd] = useState("");
 
   useEffect(() => {
@@ -21,7 +24,7 @@ export default function ProductsDropdown({ products, addProduct }) {
       <InputGroup>
         <Form.Control
           as="select"
-          name="product"
+          name="products"
           defaultValue="0"
           onChange={(e) => setProductToAdd(e.target.value)}
           custom
