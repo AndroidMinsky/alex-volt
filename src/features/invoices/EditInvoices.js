@@ -11,7 +11,7 @@ import InvoiceForm from "./InvoiceForm";
 
 export default function EditInvoices() {
   const dispatch = useDispatch();
-  let history = useHistory();
+  const history = useHistory();
   const { id } = useParams();
   const { invoice, loading, error } = useSelector(selectSingleInvoice);
 

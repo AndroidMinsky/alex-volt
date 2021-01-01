@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { nanoid } from "nanoid";
-import produce from "immer";
+import { useForm, useFieldArray } from "react-hook-form";
+
 import CustomersDropdown from "../../Components/CustomersDropdown";
 import ProductsDropdown from "../../Components/ProductsDropdown";
-import { useSelector, useDispatch } from "react-redux";
-import { selectProducts } from "../products/productsSlice";
+import { useDispatch } from "react-redux";
 import { updateInvoice } from "./invoicesSlice";
 
 import Form from "react-bootstrap/Form";
@@ -18,82 +16,35 @@ import Button from "react-bootstrap/Button";
 import { RiDeleteBin2Line } from "react-icons/ri";
 
 export default function InvoiceForm({ invoice }) {
-  let history = useHistory();
-  const { register, handleSubmit } = useForm({
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { register, watch, control, handleSubmit } = useForm({
     defaultValues: invoice,
   });
-  const { products } = useSelector(selectProducts);
-  const dispatch = useDispatch();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "products",
+  });
 
-  const [productsList, setProductsList] = useState("");
-  const [discount, setDiscount] = useState(invoice.discount);
-
-  useEffect(() => {
-    setProductsList(invoice.products);
-  }, [invoice.products]);
-
-  const handleAddProduct = (productName) => {
-    const id = nanoid();
-    if (productName) {
-      const product = products.find((product) => product.name === productName);
-      const productToAdd = (({ name, price }) => ({
-        id: id,
-        name,
-        price,
-        quantity: 1,
-      }))(product);
-
-      setProductsList(
-        produce((draft) => {
-          draft.push(productToAdd);
-        })
-      );
-    }
-  };
-
-  const handleQuantityChange = (value, name, index) => {
-    const newPrice =
-      products.find((product) => product.name === name).price * value;
-
-    setProductsList(
-      produce((draft) => {
-        draft[index].price = newPrice;
-        draft[index].quantity = +value;
-      })
-    );
-  };
-
-  const handleDeleteProduct = (id) => {
-    setProductsList(
-      produce((draft) => {
-        const index = draft.findIndex((product) => product.id === id);
-        draft.splice(index, 1);
-      })
-    );
-  };
+  const discount = watch("discount");
+  const products = watch("products", fields);
 
   const totalPrice = useMemo(() => {
-    if (productsList.length) {
-      const productsPrice = productsList
-        .map((product) => product.price)
+    if (products.length) {
+      const productsPrice = products
+        .map((product) => product.price * product.quantity)
         .reduce((a, b) => a + b);
       return (productsPrice - (productsPrice * discount) / 100).toFixed(2);
     }
     return 0;
-  }, [discount, productsList]);
+  }, [discount, products]);
 
   const handleCancel = () => {
     history.goBack();
   };
 
   const onSubmit = (data) => {
-    const editedInvoice = (({ customerName, discount }) => ({
-      id: invoice.id,
-      discount,
-      customerName,
-      products: productsList,
-      totalPrice,
-    }))(data);
+    const editedInvoice = { id: invoice.id, ...data, totalPrice };
     dispatch(updateInvoice({ id: invoice.id, newData: editedInvoice }));
     history.goBack();
   };
@@ -108,7 +59,6 @@ export default function InvoiceForm({ invoice }) {
             name="discount"
             type="number"
             ref={register}
-            onChange={(e) => setDiscount(e.target.value)}
           />
         </Form.Group>
       </Col>
@@ -118,7 +68,7 @@ export default function InvoiceForm({ invoice }) {
       </Col>
 
       <Col sm={6} className="p-0">
-        <ProductsDropdown addProduct={handleAddProduct} />
+        <ProductsDropdown addProduct={append} />
       </Col>
 
       <Table striped hover className="mt-4">
@@ -131,41 +81,54 @@ export default function InvoiceForm({ invoice }) {
           </tr>
         </thead>
         <tbody>
-          {productsList
-            ? productsList.map((product, index) => (
-                <tr key={product.id}>
-                  <td className="align-middle">{product.name}</td>
-                  <td className="align-middle">${product.price.toFixed(2)}</td>
-                  <td className="align-middle">
-                    <Col sm={4} className="p-0">
-                      <Form.Group className="m-0">
-                        <Form.Label srOnly>Quantity</Form.Label>
-                        <Form.Control
-                          placeholder="Quantity"
-                          name="quantity"
-                          type="number"
-                          value={product.quantity}
-                          onChange={(e) =>
-                            handleQuantityChange(
-                              e.target.value,
-                              product.name,
-                              index
-                            )
-                          }
-                        />
-                      </Form.Group>
-                    </Col>
-                  </td>
-                  <td className="align-middle">
-                    <RiDeleteBin2Line
-                      size="1.5em"
-                      style={{ cursor: "pointer" }}
-                      onClick={() => handleDeleteProduct(product.id)}
+          {fields.map(({ id, name, price, quantity }, index) => (
+            <tr key={id}>
+              <td className="align-middle">
+                <Form.Group className="m-0">
+                  <Form.Label srOnly>Name</Form.Label>
+                  <Form.Control
+                    plaintext
+                    ref={register()}
+                    name={`products[${index}].name`}
+                    defaultValue={name}
+                  />
+                </Form.Group>
+              </td>
+              <td className="align-middle">
+                <Form.Group className="m-0">
+                  <Form.Label srOnly>Price</Form.Label>
+                  <Form.Control
+                    plaintext
+                    ref={register()}
+                    name={`products[${index}].price`}
+                    defaultValue={`${price}`}
+                  />
+                </Form.Group>
+              </td>
+
+              <td className="align-middle">
+                <Col sm={4} className="p-0">
+                  <Form.Group className="m-0">
+                    <Form.Label srOnly>Quantity</Form.Label>
+                    <Form.Control
+                      ref={register()}
+                      placeholder="Quantity"
+                      name={`products[${index}].quantity`}
+                      type="number"
+                      defaultValue={quantity}
                     />
-                  </td>
-                </tr>
-              ))
-            : null}
+                  </Form.Group>
+                </Col>
+              </td>
+              <td className="align-middle">
+                <RiDeleteBin2Line
+                  size="1.5em"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => remove(index)}
+                />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
 

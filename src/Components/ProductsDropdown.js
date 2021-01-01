@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 import {
   fetchProducts,
   selectProducts,
@@ -12,11 +13,25 @@ import InputGroup from "react-bootstrap/InputGroup";
 export default function ProductsDropdown({ addProduct }) {
   const dispatch = useDispatch();
   const { products } = useSelector(selectProducts);
-  const [productToAdd, setProductToAdd] = useState("");
+  const { register, watch } = useForm();
+
+  const watchProduct = watch("addProduct");
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, [dispatch]);
+
+  const handleAddProduct = () => {
+    if (watchProduct && watchProduct !== "0") {
+      const product = products.find((product) => product.name === watchProduct);
+      const productToAdd = (({ name, price }) => ({
+        name,
+        price,
+        quantity: 1,
+      }))(product);
+      addProduct(productToAdd, false);
+    }
+  };
 
   return (
     <Form.Group>
@@ -24,9 +39,9 @@ export default function ProductsDropdown({ addProduct }) {
       <InputGroup>
         <Form.Control
           as="select"
-          name="products"
+          name="addProduct"
           defaultValue="0"
-          onChange={(e) => setProductToAdd(e.target.value)}
+          ref={register}
           custom
         >
           <option value="0" disabled>
@@ -42,7 +57,7 @@ export default function ProductsDropdown({ addProduct }) {
           <Button
             variant="outline-dark"
             className="align-text-bottom d-inline-block"
-            onClick={() => addProduct(productToAdd)}
+            onClick={handleAddProduct}
           >
             Add
           </Button>

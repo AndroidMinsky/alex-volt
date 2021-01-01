@@ -2,17 +2,26 @@
   "invoices": [
     {
       "id": 1,
-      "discount": "99",
+      "discount": "0",
       "customerName": "Kaia Brooks",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99,
-          "quantity": 1
+          "price": "19.99",
+          "quantity": "1"
+        },
+        {
+          "name": "Pet Rock",
+          "price": "7.49",
+          "quantity": "1"
+        },
+        {
+          "name": "Egg Timer",
+          "price": "249.75",
+          "quantity": "1"
         }
       ],
-      "totalPrice": "0.20"
+      "totalPrice": "277.23"
     },
     {
       "id": 2,
@@ -20,22 +29,19 @@
       "customerName": "Kendall Kirkpatrick",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 59.97,
-          "quantity": 3
+          "price": 19.99,
+          "quantity": 2
         },
         {
-          "id": 2,
           "name": "Egg Timer",
-          "price": 749.25,
-          "quantity": 3
+          "price": 249.75,
+          "quantity": 2
         },
         {
-          "id": "sbkkdANSSMTuLi-CD_KOC",
           "name": "Pet Rock",
-          "price": 22.47,
-          "quantity": 3
+          "price": 7.49,
+          "quantity": 2
         }
       ],
       "totalPrice": "790.11"
@@ -45,19 +51,17 @@
       "customerName": "Alysha Markham",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 59.97,
+          "price": 19.99,
           "quantity": 3
         },
         {
-          "id": 2,
           "name": "Egg Timer",
-          "price": 749.25,
+          "price": 249.75,
           "quantity": 3
         }
       ],
-      "discount": 7.5,
+      "discount": 8,
       "totalPrice": 748.53
     }
   ],
