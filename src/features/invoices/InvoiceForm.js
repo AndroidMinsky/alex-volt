@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { updateInvoice } from "./invoicesSlice";
 
 import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import Container from "react-bootstrap/Container";
@@ -68,7 +69,7 @@ export default function InvoiceForm({ invoice }) {
       </Col>
 
       <Col sm={6} className="p-0">
-        <ProductsDropdown addProduct={append} />
+        <ProductsDropdown onAddProductClick={append} />
       </Col>
 
       <Table striped hover className="mt-4">
@@ -95,14 +96,17 @@ export default function InvoiceForm({ invoice }) {
                 </Form.Group>
               </td>
               <td className="align-middle">
-                <Form.Group className="m-0">
+                <Form.Group className="m-0 form-inline">
                   <Form.Label srOnly>Price</Form.Label>
-                  <Form.Control
-                    plaintext
-                    ref={register()}
-                    name={`products[${index}].price`}
-                    defaultValue={`${price}`}
-                  />
+                  <InputGroup>
+                    <div className="pt-2 pb-2">$</div>
+                    <Form.Control
+                      plaintext
+                      ref={register()}
+                      name={`products[${index}].price`}
+                      defaultValue={price}
+                    />
+                  </InputGroup>
                 </Form.Group>
               </td>
 

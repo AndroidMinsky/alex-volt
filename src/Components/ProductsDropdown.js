@@ -10,7 +10,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 
-export default function ProductsDropdown({ addProduct }) {
+export default function ProductsDropdown({ onAddProductClick }) {
   const dispatch = useDispatch();
   const { products } = useSelector(selectProducts);
   const { register, watch } = useForm();
@@ -24,12 +24,11 @@ export default function ProductsDropdown({ addProduct }) {
   const handleAddProduct = () => {
     if (watchProduct && watchProduct !== "0") {
       const product = products.find((product) => product.name === watchProduct);
-      const productToAdd = (({ name, price }) => ({
-        name,
-        price,
+      const productToAdd = {
+        ...product,
         quantity: 1,
-      }))(product);
-      addProduct(productToAdd, false);
+      };
+      onAddProductClick(productToAdd, false);
     }
   };
 
