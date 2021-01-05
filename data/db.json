@@ -2,57 +2,67 @@
   "invoices": [
     {
       "id": 1,
+      "discount": "0",
       "customerName": "Kaia Brooks",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99
+          "price": "19.99",
+          "quantity": "1"
         },
         {
-          "id": 2,
-          "name": "Phone Holder",
-          "price": 249.75
+          "name": "Pet Rock",
+          "price": "7.49",
+          "quantity": "1"
+        },
+        {
+          "name": "Egg Timer",
+          "price": "249.75",
+          "quantity": "1"
         }
       ],
-      "discount": 10,
-      "totalPrice": 420.69
+      "totalPrice": "277.23"
     },
     {
       "id": 2,
+      "discount": "5",
       "customerName": "Kendall Kirkpatrick",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99
+          "price": 19.99,
+          "quantity": 2
         },
         {
-          "id": 2,
-          "name": "Phone Holder",
-          "price": 249.75
+          "name": "Egg Timer",
+          "price": 249.75,
+          "quantity": 2
+        },
+        {
+          "name": "Pet Rock",
+          "price": 7.49,
+          "quantity": 2
         }
       ],
-      "discount": 5,
-      "totalPrice": 99.75
+      "totalPrice": "790.11"
     },
     {
       "id": 3,
       "customerName": "Alysha Markham",
       "products": [
         {
-          "id": 1,
           "name": "Phone Holder",
-          "price": 19.99
+          "price": 19.99,
+          "quantity": 3
         },
         {
-          "id": 2,
-          "name": "Phone Holder",
-          "price": 249.75
+          "name": "Egg Timer",
+          "price": 249.75,
+          "quantity": 3
         }
       ],
-      "discount": 7.5,
-      "totalPrice": 75.49
+      "discount": 8,
+      "totalPrice": 748.53
     }
   ],
   "customers": [
@@ -74,7 +84,6 @@
       "address": "1358 Colony Street, Cheshire CT 06410",
       "phone": "203-417-2435"
     }
-    
   ],
   "products": [
     {
@@ -89,7 +98,7 @@
     },
     {
       "id": 3,
-      "name": "Phone Holder",
+      "name": "Egg Timer",
       "price": 249.75
     }
   ]

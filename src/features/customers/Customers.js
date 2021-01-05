@@ -83,9 +83,7 @@ export default function Customers() {
                         style={{ cursor: "pointer" }}
                         className="mr-3"
                         onClick={() => handleShowEditModal(customer.id)}
-                      >
-                        Edit
-                      </RiEdit2Line>
+                      />
                       <RiDeleteBin2Line
                         size="1.5em"
                         style={{ cursor: "pointer" }}
