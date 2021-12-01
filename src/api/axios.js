@@ -1,5 +1,5 @@
 import Axios from "axios";
 
 export const axios = Axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://gentle-brook-20502.herokuapp.com/",
 });

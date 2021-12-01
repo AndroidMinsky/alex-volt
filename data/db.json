@@ -30,39 +30,39 @@
       "products": [
         {
           "name": "Phone Holder",
-          "price": 19.99,
-          "quantity": 2
+          "price": "19.99",
+          "quantity": "2"
         },
         {
           "name": "Egg Timer",
-          "price": 249.75,
-          "quantity": 2
+          "price": "249.75",
+          "quantity": "2"
         },
         {
           "name": "Pet Rock",
-          "price": 7.49,
-          "quantity": 2
+          "price": "7.49",
+          "quantity": "2"
         }
       ],
-      "totalPrice": "790.11"
+      "totalPrice": "526.74"
     },
     {
       "id": 3,
+      "discount": "8",
       "customerName": "Alysha Markham",
       "products": [
         {
           "name": "Phone Holder",
-          "price": 19.99,
-          "quantity": 3
+          "price": "19.99",
+          "quantity": "3"
         },
         {
           "name": "Egg Timer",
-          "price": 249.75,
-          "quantity": 3
+          "price": "249.75",
+          "quantity": "3"
         }
       ],
-      "discount": 8,
-      "totalPrice": 748.53
+      "totalPrice": "744.48"
     }
   ],
   "customers": [
